@@ -12,4 +12,4 @@ https://docs.google.com/document/d/1qqs5X0vSslAEYBxlAh95oDgC1dG5xmBKVknz7wl1QxA/
   * add sort to switch statement
 
 ### Update the lookup table in main()
-  * add nameto portal_lookup var
+  * add name to portal_lookup var
