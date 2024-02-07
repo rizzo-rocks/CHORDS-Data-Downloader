@@ -53,7 +53,7 @@ def is_wind_dir(measurement:str) -> bool:
 
 """
 Takes the dictionary entry of the measurements at a timestamp obtained from API. Adds the compass rose classification 
-for all measurements containing wind direction or wind gust direction to an updated dictionary and returns it.
+for all measurements containing wind direction or wind gust direction to a new updated dictionary and returns it.
 """
 def write_compass_direction(dictionary:dict, null_value) -> dict:
     if not isinstance(dictionary, dict):
@@ -62,7 +62,7 @@ def write_compass_direction(dictionary:dict, null_value) -> dict:
     updated_dict = dictionary
     for measurement in list(dictionary.keys()):
         if is_wind_dir(measurement):
-            compass_dir = {'compass_dir': wind_direction_mapper(int(dictionary[measurement]), null_value)}
+            compass_dir = {f'{measurement}_compass_dir': wind_direction_mapper(int(dictionary[measurement]), null_value)}
             updated_dict.update(compass_dir)  
 
     return updated_dict
@@ -79,7 +79,8 @@ def headers_are_valid(columns_desired:list, columns_found:list, portal_name:str)
         raise TypeError(f"The 'portal_name' parameter of headers_are_valid() should be of type <str>, passed: {type(portal_name)}")
 
     for col in columns_desired:
-        if col == 'compass_dir':
+        #if col == 'compass_dir':
+        if col.endswith('compass_dir'):
             print("\t\t ======================= ERROR =======================")
             print("\t\t 'compass_dir' is not a valid input.")
             print(f"\t\t Only specify shortnames found in {portal_name} associated with the instrument id.")
@@ -164,7 +165,8 @@ def sort_columns(columns:list, portal_name:str) -> list:
 """
 Takes a list of dictionaries and returns a list of the set of all variables to be used as columns in the csv.
 The exception is when include_test is set to True -- it will append a column 'test' next to each variable indicating 
-whether the data is test data.
+whether the data is test data. If a wind direction column is in the set, an adjacent compass_dir column will be appended
+containing the corresponding compass rose reading for each field.
 """
 def get_columns(dictionary_list:list, include_test:bool, portal_name:str) -> list:
     if not isinstance(dictionary_list, list):
@@ -184,7 +186,7 @@ def get_columns(dictionary_list:list, include_test:bool, portal_name:str) -> lis
                 if include_test:
                     columns.append('test')
                 if is_wind_dir(col):
-                    columns.append('compass_dir')
+                    columns.append(f'{col}_compass_dir')
 
     return columns
 

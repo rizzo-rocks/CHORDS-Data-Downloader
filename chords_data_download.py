@@ -49,7 +49,7 @@ end = 'YYYY-MM-DD HH:MM:SS'
 columns_desired = [] # it is important that the list be empty if no columns are to be specified!
 
 time_window_start = 'HH:MM:SS' # it is important that these be empty strings if no time window is to be specified!
-time_window_end = 'HH:MM:SS'  
+time_window_end = 'HH:MM:SS'   
 
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
 
@@ -99,8 +99,7 @@ def main():
 
             url = f"{portal_url}/api/v1/data/{iD}?start={start}&end={end}&email={user_email}&api_key={api_key}"
             response = requests.get(url=url)
-            all_fields = loads(dumps(response.json())) # dictionary containing the results of API request
-
+            all_fields = loads(dumps(response.json())) # dictionary containing deep copy of JSON-formatted CHORDS data
             if resources.has_errors(all_fields):
                 sys.exit(1)
             
