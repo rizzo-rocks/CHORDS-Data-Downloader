@@ -79,18 +79,18 @@ def headers_are_valid(columns_desired:list, columns_found:list, portal_name:str)
         raise TypeError(f"The 'portal_name' parameter of headers_are_valid() should be of type <str>, passed: {type(portal_name)}")
 
     for col in columns_desired:
-        #if col == 'compass_dir':
         if col.endswith('compass_dir'):
-            print("\t\t ======================= ERROR =======================")
-            print("\t\t 'compass_dir' is not a valid input.")
-            print(f"\t\t Only specify shortnames found in {portal_name} associated with the instrument id.")
+            print("\t ======================= ERROR =======================")
+            print("\t 'compass_dir' columns are not valid.")
+            print(f"\t Only specify shortnames found in {portal_name} associated with the instrument id.")
+            return False
         if col not in columns_found:
-            print("\t\t ======================= ERROR =======================")
-            print(f"\t\t Could not locate desired column '{col}' in data stream.")
+            print("\t ======================= ERROR =======================")
+            print(f"\t Could not locate desired column '{col}' in data stream.")
             str_1 = ""
             for j in columns_found:
                 str_1 += f"{j}  "
-            print(f"\t\t Column(s) identified in data stream: {str_1}")
+            print(f"\t Column(s) identified in data stream: {str_1}")
             return False
         
     return True
@@ -185,8 +185,6 @@ def get_columns(dictionary_list:list, include_test:bool, portal_name:str) -> lis
                 columns.append(str(col))
                 if include_test:
                     columns.append('test')
-                if is_wind_dir(col):
-                    columns.append(f'{col}_compass_dir')
 
     return columns
 
@@ -219,7 +217,7 @@ def build_headers(measurements:list, columns_desired:list, include_test:bool, po
             if include_test:
                 headers.append(columns[i+1])
             if is_wind_dir(columns[i]):
-                headers.append('compass_dir')
+                headers.append(f'{columns[i]}_compass_dir')
         elif len(columns_desired) != 0 and columns[i] not in columns_desired:
             continue  
         else:
