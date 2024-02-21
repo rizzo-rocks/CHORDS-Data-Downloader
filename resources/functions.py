@@ -439,6 +439,17 @@ def get_timestamps(start_time:datetime, end_time:datetime, divisions:int) -> lis
     return new_timestamps
 
 """
+Accepts a timestamp string from the CHORDS API and parses out the timestamp. Returns a datetime object of the parameter.
+    e.g.  '2023-12-17T18:45:56Z'
+"""
+def get_time(timestamp:str) -> datetime:
+    if not isinstance(timestamp, str):
+        raise TypeError(f"The 'timestamp' parameter in get_time() should be of type <str>, passed: {type(timestamp)}")
+    
+    format_str = "%H:%M:%S" 
+    return datetime.strptime(timestamp[11:19], format_str)
+
+"""
 Handles data request error where number of data points exceeds that allowed. Returns a list of new timestamps for which 
 to run the API request to CHORDS s.t. the number of data points requested is less than the max allowed. Returns the 
 lists of data necessary for main() to build csv's.
