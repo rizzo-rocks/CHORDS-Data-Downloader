@@ -291,7 +291,7 @@ def struct_has_data(measurements:np.ndarray, time:np.ndarray, test:np.ndarray) -
         #print("\t\t No measurements found.")
         flag = False
     if len(time) == 0:
-        print("\t\t No timestamps found.")
+        print("\t\t No timestamps found.\n")
         flag = False
     if len(test) == 0:
         #print("\t\t No test values found.")
