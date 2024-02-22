@@ -96,6 +96,7 @@ def main():
             test = [] # list of strings of whether data point is a test value (either 'true' or 'false')
 
             total_num_measurements = 0
+            total_num_timestamps = 0
 
             url = f"{portal_url}/api/v1/data/{iD}?start={start}&end={end}&email={user_email}&api_key={api_key}"
             response = requests.get(url=url)
@@ -122,6 +123,7 @@ def main():
                        #print(f"Current minute: {t.minute} | Whole timestamp: {t}")
                         time.append(str(data[i]['time']))
                         total_num_measurements += len(data[i]['measurements'].keys())
+                        total_num_timestamps += 1
                         to_append = resources.write_compass_direction(dict(data[i]['measurements']), null_value)
                         measurements.append(to_append)
                         test.append(str(data[i]['test']))
@@ -186,10 +188,11 @@ def main():
             file_path = data_path + csv
             resources.csv_builder(headers, time, measurements, test, file_path, include_test, null_value)
             print(f"\t Finished writing to file.\t\t\t\t\t\t{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-            print(f"\t Total number of measurements: {total_num_measurements}\n")
+            print(f"\t Total number of measurements: {total_num_measurements}")
+            print(f"\t Total number of timestamps: {total_num_timestamps}\n")
         else:
-            print("\t ========================= WARNING =========================")
-            print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
+            # print("\t ========================= WARNING =========================")
+            # print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
             txt = f"\\{portal_name}_instrumentID_{iD}_[WARNING].txt"
             file_path = data_path + txt
             with open(file_path, 'w') as file:
