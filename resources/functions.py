@@ -288,13 +288,13 @@ def struct_has_data(measurements:np.ndarray, time:np.ndarray, test:np.ndarray) -
     
     flag = True
     if len(measurements) == 0:
-        print("\t\t No measurements found.")
+        #print("\t\t No measurements found.")
         flag = False
     if len(time) == 0:
-        print("\t\t No timestamps found.")
+        print("\t\t No timestamps found.\n")
         flag = False
     if len(test) == 0:
-        print("\t\t No test values found.")
+        #print("\t\t No test values found.")
         flag = False
 
     return flag
@@ -437,6 +437,17 @@ def get_timestamps(start_time:datetime, end_time:datetime, divisions:int) -> lis
             sys.exit(1)
 
     return new_timestamps
+
+"""
+Accepts a timestamp string from the CHORDS API and parses out the timestamp. Returns a datetime object of the parameter.
+    e.g.  '2023-12-17T18:45:56Z'
+"""
+def get_time(timestamp:str) -> datetime:
+    if not isinstance(timestamp, str):
+        raise TypeError(f"The 'timestamp' parameter in get_time() should be of type <str>, passed: {type(timestamp)}")
+    
+    format_str = "%H:%M:%S" 
+    return datetime.strptime(timestamp[11:19], format_str)
 
 """
 Handles data request error where number of data points exceeds that allowed. Returns a list of new timestamps for which 
