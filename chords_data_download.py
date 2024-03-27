@@ -32,22 +32,20 @@ import resources
 
 null_value = ''
 include_test = False
-portal_url = r"https://chords-portal-url.com/" 
-portal_name = "Portal Name" 
-data_path = r"C:\\Path\\To\\Data\\Folder\\" 
+portal_url = r"https://3d-fewsnet.icdp.ucar.edu/" 
+portal_name = "FEWSNET" 
+data_path = r"/Users/rzieber/Documents/3D-PAWS/CHORDS_Data_Download/CHORDS_Data_Downloader/debug" 
 instrument_IDs = [
-    1, 2, 3
+    13 # wambugu farm
 ]
-
-user_email = ''
-api_key = '' 
-start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0700 or 0800, depending on the portal
-start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0600, 0700 or 0800, depending on the portal
-end = 'YYYY-MM-DD HH:MM:SS'
+user_email = 'rzieber@ucar.edu'
+api_key = 'QSy8irrRowbi6ys-5PHe' 
+start = '2024-03-02 07:00:00' # CHORDS starts a new day at 0700 or 0800, depending on the portal
+end = '2024-03-03 06:59:59'
 
 columns_desired = [] # it is important that the list be empty if no columns are to be specified!
-time_window_start = 'HH:MM:SS' # it is important that these be empty strings if no time window is to be specified!
-time_window_end = 'HH:MM:SS'    
+time_window_start = '' # it is important that these be empty strings if no time window is to be specified!
+time_window_end = ''    
 
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
 
@@ -117,14 +115,14 @@ def main():
                 for i in range(len(data)):
                     t = resources.get_time(data[i]['time'])
 
-                    if t.minute != 0 and t.minute != 15 and t.minute != 30 and t.minute != 45: # only keep those timestamps not on 15 minute interval
+                    #if t.minute != 0 and t.minute != 15 and t.minute != 30 and t.minute != 45: # only keep those timestamps not on 15 minute interval
                        #print(f"Current minute: {t.minute} | Whole timestamp: {t}")
-                        time.append(str(data[i]['time']))
-                        total_num_measurements += len(data[i]['measurements'].keys())
-                        total_num_timestamps += 1
-                        to_append = resources.write_compass_direction(dict(data[i]['measurements']), null_value)
-                        measurements.append(to_append)
-                        test.append(str(data[i]['test']))
+                    time.append(str(data[i]['time']))
+                    total_num_measurements += len(data[i]['measurements'].keys())
+                    total_num_timestamps += 1
+                    to_append = resources.write_compass_direction(dict(data[i]['measurements']), null_value)
+                    measurements.append(to_append)
+                    test.append(str(data[i]['test']))
                         #print(f"Appended {data[i]['time']}")
 
                         # We don't need to check +- 1, we only want timestamps not on the 15 minute marks.
