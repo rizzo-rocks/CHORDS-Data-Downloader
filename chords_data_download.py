@@ -32,20 +32,23 @@ import resources
 
 null_value = ''
 include_test = False
-portal_url = r"https://3d-fewsnet.icdp.ucar.edu/" 
-portal_name = "FEWSNET" 
-data_path = r"/Users/rzieber/Documents/3D-PAWS/CHORDS_Data_Download/CHORDS_Data_Downloader/debug" 
+portal_url = r"https://chords-portal-url.com/" 
+portal_name = "Portal Name" 
+data_path = r"C:\\Path\\To\\Data\\Folder\\" 
 instrument_IDs = [
-    13 # wambugu farm
+    1, 2, 3
 ]
-user_email = 'rzieber@ucar.edu'
-api_key = 'QSy8irrRowbi6ys-5PHe' 
-start = '2024-03-02 07:00:00' # CHORDS starts a new day at 0700 or 0800, depending on the portal
-end = '2024-03-03 06:59:59'
+
+user_email = ''
+api_key = '' 
+start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0700 or 0800, depending on the portal
+start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0600, 0700 or 0800, depending on the portal
+end = 'YYYY-MM-DD HH:MM:SS'
 
 columns_desired = [] # it is important that the list be empty if no columns are to be specified!
-time_window_start = '' # it is important that these be empty strings if no time window is to be specified!
-time_window_end = ''    
+time_window_start = 'HH:MM:SS' # it is important that these be empty strings if no time window is to be specified!
+time_window_end = 'HH:MM:SS' 
+  
 
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
 
