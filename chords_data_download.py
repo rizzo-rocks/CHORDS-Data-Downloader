@@ -41,7 +41,6 @@ instrument_IDs = [
 
 user_email = ''
 api_key = '' 
-start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0700 or 0800, depending on the portal
 start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0600, 0700 or 0800, depending on the portal
 end = 'YYYY-MM-DD HH:MM:SS'
 
