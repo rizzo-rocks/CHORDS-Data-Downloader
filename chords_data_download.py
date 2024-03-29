@@ -116,57 +116,13 @@ def main():
                                                                         # ( e.g. {'time': '2023-12-17T18:45:56Z', 'test': 'false', 'measurements': {'ws': 1.55, 'rain': 1}} )
                 for i in range(len(data)):
                     t = resources.get_time(data[i]['time'])
-
-                    #if t.minute != 0 and t.minute != 15 and t.minute != 30 and t.minute != 45: # only keep those timestamps not on 15 minute interval
-                       #print(f"Current minute: {t.minute} | Whole timestamp: {t}")
                     time.append(str(data[i]['time']))
                     total_num_measurements += len(data[i]['measurements'].keys())
                     total_num_timestamps += 1
                     to_append = resources.write_compass_direction(dict(data[i]['measurements']), null_value)
                     measurements.append(to_append)
                     test.append(str(data[i]['test']))
-                        #print(f"Appended {data[i]['time']}")
-
-                        # We don't need to check +- 1, we only want timestamps not on the 15 minute marks.
-                        # if i+1 < len(data):
-                        #     plus_delta = resources.get_time(data[i+1]['time'])
-                        #     print(f"Plus delta: {plus_delta.minute} | Whole timestamp {plus_delta}")
-                        #     print(f"The time delta is: {plus_delta - t} vs. {timedelta(minutes=5)}")
-
-                        #     if plus_delta - t <= timedelta(minutes=5):
-                        #         time.append(str(data[i+1]['time']))
-                        #         total_num_measurements += len(data[i+1]['measurements'].keys())
-                        #         to_append = resources.write_compass_direction(dict(data[i+1]['measurements']), null_value)
-                        #         measurements.append(to_append)
-                        #         test.append(str(data[i+1]['test']))
-                        #         print(f"Appended {data[i+1]['time']}")
-                        #     else:
-                        #         print("Diff between delta and current greater than 5 minutes.")
-                        # else: 
-                        #     print(f"Out of bounds for index {i}+1. Data length: {len(data)}")
-                            
-                            
-                        # if i-1 > 0:
-                        #     minus_delta = resources.get_time(data[i-1]['time'])
-                        #     print(f"Minus delta: {minus_delta.minute} | Whole timestamp: {minus_delta}")
-                        #     print(f"The time delta is: {t - minus_delta} vs. {timedelta(minutes=5)}")
-
-                        #     if t - minus_delta <= timedelta(minutes=5):
-                        #         time.append(str(data[i-1]))
-                        #         total_num_measurements += len(data[i-1]['measurements'].keys())
-                        #         to_append = resources.write_compass_direction(dict(data[i-1]['measurements']), null_value)
-                        #         measurements.append(to_append)
-                        #         test.append(str(data[i-1]['test']))
-                        #         print(f"Appended {data[i-1]['time']}")
-                        #     else:
-                        #         print("Diff between delta and current greater than 5 minutes.")
-                        # else:
-                        #     print(f"Out of bounds for index {i}-1.")
                         
-                        # print()
-
-                
-        
         else: # if a time window was specified by user
             print(f"\t\t Time window specified.\n\t\t Returning data from {time_window_start} -> {time_window_end}")
             window_data = resources.time_window(int(iD), timestamp_start, timestamp_end, timestamp_window_start, timestamp_window_end, \
@@ -189,8 +145,8 @@ def main():
             print(f"\t Total number of measurements: {total_num_measurements}")
             print(f"\t Total number of timestamps: {total_num_timestamps}\n")
         else:
-            # print("\t ========================= WARNING =========================")
-            # print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
+            print("\t ========================= WARNING =========================")
+            print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
             txt = f"\\{portal_name}_instrumentID_{iD}_[WARNING].txt"
             file_path = data_path + txt
             with open(file_path, 'w') as file:
