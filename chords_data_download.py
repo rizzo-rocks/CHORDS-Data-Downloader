@@ -1,23 +1,9 @@
 """
-CHORDS Data Downloader - modified by Rebecca Zieber
+Kenya April 2024 Visit 
 
-This script takes parameters specified by the user and accesses the CHORDS database to extract data and download it. 
-Data is separated by instrument ID. A csv is created for each instrument spanning the desired time frame. 
-
-User Parameter Breakdown:
-    - null_value: Enter whatever value should be used to signal no data (e.g. -999.99 or 'NaN'). Empty string by default (saves space).
-    - include_test: Set to True to include columns which specify whether data collected was test data (False by default).
-    - portal_url: The url for the CHORDS online portal.
-    - portal_name: The name of the CHORDS portal as it appears online (case sensitive): Barbados, Trinidad, 3D PAWS, 3D Calibration, FEWNSET, Kenya, Cayman Islands
-    - data_path: The absolute folder path specifying where the CSV files should be printed to locally.
-    - instrument_IDs: All the instruments to download data from. Use the Instrument Id from CHORDS portal.
-    - user_email: The email login information in order to access the CHORDS online portal.
-    - api_key: The API key which corresponds to the user's email address.
-    - start: The timestamp from which to start downloading data (MUST be in the following format: 'YYYY-MM-DD HH:MM:SS' e.g. '2023-11-25 00:00:00').
-    - end: The timestamp at which to end downloading data (MUST be in the following format: 'YYYY-MM-DD HH:MM:SS' e.g. '2023-11-31 23:59:59').
-    - columns_desired: Enter the shortnames for the columns to include in csv (e.g. ['t1', 't2', 't3']). Includes all if left blank.
-    - time_window_start: Timestamp from which to collect subset of data (MUST be in the following format: 'HH:MM:SS') 
-    - time_window_end: Timestamp from which to stop collecting subset of data (MUST be in the following format: 'HH:MM:SS')
+Original dataset pulled by UCSB calculated daily rainfall from 00:00Z -> 00:00Z.
+We need the dataset to compare rainfall totals from 06:00Z -> 06:00Z to line up with KMZ.
+We also need January data in order to do pentad rainfall comparison.
 """
 import requests
 from json import dumps
@@ -32,22 +18,21 @@ import resources
 
 null_value = ''
 include_test = False
-portal_url = r"https://chords-portal-url.com/" 
-portal_name = "Portal Name" 
-data_path = r"C:\\Path\\To\\Data\\Folder\\" 
+portal_url = r"https://3d-fewsnet.icdp.ucar.edu/" 
+portal_name = "FEWSNET" 
+data_path = r"/Users/rzieber/Desktop/Station_Data/3DPAWS_Oct2023-Jan2024/"
 instrument_IDs = [
-    1, 2, 3
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24
 ]
 
-user_email = ''
-api_key = '' 
-start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0700 or 0800, depending on the portal
-start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0600, 0700 or 0800, depending on the portal
-end = 'YYYY-MM-DD HH:MM:SS'
+user_email = 'rzieber@ucar.edu'
+api_key = 'QSy8irrRowbi6ys-5PHe' 
+start = '2023-10-01 00:00:00' # Pull rainy season dataset for analysis via previous day's rainfall total Oct - Jan
+end = '2024-02-02 06:00:00'
 
 columns_desired = [] # it is important that the list be empty if no columns are to be specified!
-time_window_start = 'HH:MM:SS' # it is important that these be empty strings if no time window is to be specified!
-time_window_end = 'HH:MM:SS' 
+time_window_start = '' # it is important that these be empty strings if no time window is to be specified!
+time_window_end = '' 
   
 
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
@@ -90,7 +75,7 @@ def main():
         print(f"---> Reading instrument ID {iD}\t\t\t\t\t\t\t{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
         if time_window_start == "" and time_window_end == "":
-            time = [] # list of strings  (e.g. '2023-12-17T00:00:04Z')
+            time = [] # list of datetime objects
             measurements = [] # list of dictionaries  (e.g. {'t1': 25.3, 'uv1': 2, 'rh1': 92.7, 'sp1': 1007.43, 't2': 26.9, 'vis1': 260, 'ir1': 255, 'msl1': 1013.01, 't3': 26.1})
             test = [] # list of strings of whether data point is a test value (either 'true' or 'false')
 
@@ -116,58 +101,14 @@ def main():
                 data = all_fields['features'][0]['properties']['data']  # list of dictionaries 
                                                                         # ( e.g. {'time': '2023-12-17T18:45:56Z', 'test': 'false', 'measurements': {'ws': 1.55, 'rain': 1}} )
                 for i in range(len(data)):
-                    t = resources.get_time(data[i]['time'])
-
-                    #if t.minute != 0 and t.minute != 15 and t.minute != 30 and t.minute != 45: # only keep those timestamps not on 15 minute interval
-                       #print(f"Current minute: {t.minute} | Whole timestamp: {t}")
-                    time.append(str(data[i]['time']))
+                    t = resources.get_timestamp(data[i]['time'])
+                    time.append(t)
                     total_num_measurements += len(data[i]['measurements'].keys())
                     total_num_timestamps += 1
                     to_append = resources.write_compass_direction(dict(data[i]['measurements']), null_value)
                     measurements.append(to_append)
                     test.append(str(data[i]['test']))
-                        #print(f"Appended {data[i]['time']}")
 
-                        # We don't need to check +- 1, we only want timestamps not on the 15 minute marks.
-                        # if i+1 < len(data):
-                        #     plus_delta = resources.get_time(data[i+1]['time'])
-                        #     print(f"Plus delta: {plus_delta.minute} | Whole timestamp {plus_delta}")
-                        #     print(f"The time delta is: {plus_delta - t} vs. {timedelta(minutes=5)}")
-
-                        #     if plus_delta - t <= timedelta(minutes=5):
-                        #         time.append(str(data[i+1]['time']))
-                        #         total_num_measurements += len(data[i+1]['measurements'].keys())
-                        #         to_append = resources.write_compass_direction(dict(data[i+1]['measurements']), null_value)
-                        #         measurements.append(to_append)
-                        #         test.append(str(data[i+1]['test']))
-                        #         print(f"Appended {data[i+1]['time']}")
-                        #     else:
-                        #         print("Diff between delta and current greater than 5 minutes.")
-                        # else: 
-                        #     print(f"Out of bounds for index {i}+1. Data length: {len(data)}")
-                            
-                            
-                        # if i-1 > 0:
-                        #     minus_delta = resources.get_time(data[i-1]['time'])
-                        #     print(f"Minus delta: {minus_delta.minute} | Whole timestamp: {minus_delta}")
-                        #     print(f"The time delta is: {t - minus_delta} vs. {timedelta(minutes=5)}")
-
-                        #     if t - minus_delta <= timedelta(minutes=5):
-                        #         time.append(str(data[i-1]))
-                        #         total_num_measurements += len(data[i-1]['measurements'].keys())
-                        #         to_append = resources.write_compass_direction(dict(data[i-1]['measurements']), null_value)
-                        #         measurements.append(to_append)
-                        #         test.append(str(data[i-1]['test']))
-                        #         print(f"Appended {data[i-1]['time']}")
-                        #     else:
-                        #         print("Diff between delta and current greater than 5 minutes.")
-                        # else:
-                        #     print(f"Out of bounds for index {i}-1.")
-                        
-                        # print()
-
-                
-        
         else: # if a time window was specified by user
             print(f"\t\t Time window specified.\n\t\t Returning data from {time_window_start} -> {time_window_end}")
             window_data = resources.time_window(int(iD), timestamp_start, timestamp_end, timestamp_window_start, timestamp_window_end, \
@@ -188,27 +129,15 @@ def main():
             resources.csv_builder(headers, time, measurements, test, file_path, include_test, null_value)
             print(f"\t Finished writing to file.\t\t\t\t\t\t{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             print(f"\t Total number of measurements: {total_num_measurements}")
-            print(f"\t Total number of timestamps: {total_num_timestamps}\n")
         else:
-            # print("\t ========================= WARNING =========================")
-            # print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
+            print("\t ========================= WARNING =========================")
+            print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
             txt = f"\\{portal_name}_instrumentID_{iD}_[WARNING].txt"
             file_path = data_path + txt
             with open(file_path, 'w') as file:
                 file.write("No data was found for the specified time frame.\nCheck the CHORDS portal to verify.")
 
     resources.create_README(portal_name, data_path)
-    """
-    Other metadata that CHORDS website provides that my script should consider:
-        * in addition to units, the field's datatype (datetime, float, etc)
-        * attribution (website), doi, doi citation
-        * CHORDS version
-        * delimiter type
-        * instrument name and sensor id
-        * date of csv creation
-        * data collection site, lat and long, elevation
-        * the # of measurements in the file
-    """ 
 
 
 if __name__ == "__main__":

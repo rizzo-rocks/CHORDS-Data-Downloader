@@ -288,13 +288,11 @@ def struct_has_data(measurements:np.ndarray, time:np.ndarray, test:np.ndarray) -
     
     flag = True
     if len(measurements) == 0:
-        #print("\t\t No measurements found.")
         flag = False
     if len(time) == 0:
         print("\t\t No timestamps found.\n")
         flag = False
     if len(test) == 0:
-        #print("\t\t No test values found.")
         flag = False
 
     return flag
@@ -386,7 +384,8 @@ def time_window(iD:int, timestamp_start:datetime, timestamp_end:datetime, timest
 
         data = all_fields['features'][0]['properties']['data']
         for dictionary in data:
-                time.append(str(dictionary['time']))
+                t = get_timestamp(dictionary['time'])
+                time.append(t)
                 total_num_measurements += len(dictionary['measurements'].keys())
                 to_append = write_compass_direction(dict(dictionary['measurements']), null_value)
                 measurements.append(to_append)
@@ -440,14 +439,16 @@ def get_timestamps(start_time:datetime, end_time:datetime, divisions:int) -> lis
 
 """
 Accepts a timestamp string from the CHORDS API and parses out the timestamp. Returns a datetime object of the parameter.
-    e.g.  '2023-12-17T18:45:56Z'
+    e.g.  '2023-12-17T18:45:56Z' -> 2023-12-17 18:45:56
 """
-def get_time(timestamp:str) -> datetime:
+def get_timestamp(timestamp:str) -> datetime:
     if not isinstance(timestamp, str):
-        raise TypeError(f"The 'timestamp' parameter in get_time() should be of type <str>, passed: {type(timestamp)}")
+        raise TypeError(f"The 'timestamp' parameter in get_timestamp() should be of type <str>, passed: {type(timestamp)}")
     
-    format_str = "%H:%M:%S" 
-    return datetime.strptime(timestamp[11:19], format_str)
+    format_str = "%Y-%m-%d %H:%M:%S" 
+    date = timestamp[:10]
+    time = timestamp[11:19]
+    return datetime.strptime(date + ' ' + time, format_str)
 
 """
 Handles data request error where number of data points exceeds that allowed. Returns a list of new timestamps for which 
@@ -506,7 +507,8 @@ def reduce_datapoints(error_message:str, iD:int, timestamp_start:datetime, times
 
             data = all_fields['features'][0]['properties']['data']
             for dictionary in data:
-                time.append(str(dictionary['time']))
+                t = get_timestamp(dictionary['time'])
+                time.append(t)
                 total_num_measurements += len(dictionary['measurements'].keys())
                 to_append = write_compass_direction(dict(dictionary['measurements']), null_value)
                 measurements.append(to_append)
