@@ -133,10 +133,11 @@ def sort_columns(columns:list, portal_name:str) -> list:
         'wind_direction', 'wg', 'wgd', 'si1145_vis', 'si1145_ir', 'si1145_uv', 'bpc'
     ]
     f_sort = [ # FEWSNET
+        'rg1', 'rg2', 'rgt1', 'rgt2', 'rgp1', 'rgp2',
+        'hi',  'wbt', 'wbgt',
         'bt1', 'bt2', 'ht1', 'ht2', 'st1', 'mt1',
         'bh1', 'bh2', 'hh1', 'hh2', 'sh1',
         'bp1', 'bp2',
-        'rg1', 'rg2', 'rgt1', 'rgt2', 'rgp1', 'rgp2',
         'hth', 'bpc', 'bcs', 'css', 'cfr'
     ]
     d_sort = [ # Dominican Republic
@@ -396,7 +397,7 @@ def time_window(iD:int, timestamp_start:datetime, timestamp_end:datetime, timest
 
         i += 1
         if i == 100:
-            print("\t\t Large data request -- reducing.")
+            print("\t\t Large data request.")
             print("\t\t\t Getting next data segment...")
         elif i%100 == 0:
             print("\t\t\t Getting next data segment...")
@@ -719,31 +720,31 @@ def create_README(portal_name:str, data_path:str):
                 file.write("\tBMX Temperature 1\t\t\t(bt1)\t\tTemperature\t\t(degrees C)\n")
                 file.write("\tBMX Temperature 2\t\t\t(bt2)\t\tTemperature\t\t(degrees C)\n")
                 file.write("\tHTU Temperature 1\t\t\t(ht1)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHIH Temperature\t\t\t(ht2)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tSHT Temperature\t\t\t(st1)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP Temperature 1\t\t(mt1)\t\t\tTemperature\t\t(degrees C)\n")
+                file.write("\tHIH Temperature\t\t\t\t(ht2)\t\tTemperature\t\t(degrees C)\n")
+                file.write("\tSHT Temperature\t\t\t\t(st1)\t\tTemperature\t\t(degrees C)\n")
+                file.write("\tMCP Temperature 1\t\t\t(mt1)\t\tTemperature\t\t(degrees C)\n")
 
-                file.write("\tBMX Humidity 1\t\t\t(bh1)\tHumidity Value\t\t(percent %)\n")
-                file.write("\tBMX Humidity 2\t\t\t(bh2)\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHTU Humidity 1\t\t\t(hh1)\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHIH Humidity\t\t\t(hh2)\tHumidity Value\t\t(percent %)\n")
-                file.write("\tSHT Humidity\t\t\t(sh1)\tHumidity Value\t\t(percent %)\n")
+                file.write("\tBMX Humidity 1\t\t\t\t(bh1)\t\tHumidity Value\t\t(percent %)\n")
+                file.write("\tBMX Humidity 2\t\t\t\t(bh2)\t\tHumidity Value\t\t(percent %)\n")
+                file.write("\tHTU Humidity 1\t\t\t\t(hh1)\t\tHumidity Value\t\t(percent %)\n")
+                file.write("\tHIH Humidity\t\t\t\t(hh2)\t\tHumidity Value\t\t(percent %)\n")
+                file.write("\tSHT Humidity\t\t\t\t(sh1)\t\tHumidity Value\t\t(percent %)\n")
 
-                file.write("\tBMX Pressure 1\t\t\t(bp1)\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBMX Pressure 2\t\t\t(bp2)\t\tAir Pressure Value\t(hectopascal hPa)\n")
+                file.write("\tBMX Pressure 1\t\t\t\tt(bp1)\tAir Pressure Value\t(hectopascal hPa)\n")
+                file.write("\tBMX Pressure 2\t\t\t\t\t(bp2)\tAir Pressure Value\t(hectopascal hPa)\n")
 
-                file.write("\tRain Gauge 1\t\t\t\t(rg1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 2\t\t\t\t(rg2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 1 Total Today\t\t(rgt1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 2 Total Today\t\t(rgt2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 1 Total Prior\t\t(rgp1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 2 Total Prior\t\t(rgp2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+                file.write("\tRain Gauge 1\t\t\t\t(rg1)\t\tPrecipitation\t\t(millimeter mm)\n")
+                file.write("\tRain Gauge 2\t\t\t\t(rg2)\t\tPrecipitation\t\t(millimeter mm)\n")
+                file.write("\tRain Gauge 1 Total Today\t(rgt1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+                file.write("\tRain Gauge 2 Total Today\t(rgt2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+                file.write("\tRain Gauge 1 Total Prior\t(rgp1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+                file.write("\tRain Gauge 2 Total Prior\t(rgp2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
 
-                file.write("\tHealth\t\t\t(hth)\t\t\tState of Health\t\t(count #)\n\n")
-                file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
-                file.write("\tBattery Current State\t\t(bcs)\t\t\tState of Health\t\t(count #)\n")
-                file.write("\tCell Signal Strength\t\t(css)\t\t\tState of Health\t\t(percent %)\n")
-                file.write("\tBattery Charge Fault Register\t(cfr)\t\t\tState of Health\t\t(count #)\n")
+                file.write("\tHealth\t\t\t\t(hth)\t\tState of Health\t\t(count #)\n\n")
+                file.write("\tBattery Percent Charge\t\t\t(bpc)\t\tState of Health\t\t(percent %)\n")
+                file.write("\tBattery Current State\t\t\t(bcs)\t\tState of Health\t\t(count #)\n")
+                file.write("\tCell Signal Strength\t\t\t(css)\t\tState of Health\t\t(percent %)\n")
+                file.write("\tBattery Charge Fault Register\t\t(cfr)\t\tState of Health\t\t(count #)\n")
 
         # INSERT KENYA HERE
         # INSERT CAYMAN ISLANDS HERE        
