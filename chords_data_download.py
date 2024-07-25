@@ -74,20 +74,20 @@ import resources
 null_value = '' # OPTIONAL
 include_test = False # OPTIONAL
 
-portal_url = r"https://3d-fewsnet.icdp.ucar.edu/" 
-portal_name = "FEWSNET"
-data_path = r"/Users/rzieber/Downloads/" 
+portal_url = r"https://chords.portal.com 
+portal_name = "PORTAL NAME"
+data_path = r"C://path//to//local//storage//" 
 instrument_IDs = [
     1,2,3
 ]
-user_email = 'rzieber@ucar.edu'
-api_key = 'QSy8irrRowbi6ys-5PHe' 
-start = '2024-01-01 06:00:00' 
-end = '2024-07-02 05:45:59'
+user_email = ''
+api_key = '' 
+start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0600, 0700 or 0800, depending on the portal
+end = 'YYYY-MM-DD HH:MM:SS'
 
-columns_desired = ['rgt1', 'rgt2', 'rgp1', 'rgp2'] # OPTIONAL
-time_window_start = '05:45:00' # OPTIONAL
-time_window_end = '06:00:59' # OPTIONAL
+columns_desired = [] # it is important that the list be empty if no columns are to be specified!
+time_window_start = 'HH:MM:SS' # it is important that these be empty strings if no time window is to be specified!
+time_window_end = 'HH:MM:SS' 
   
 
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
@@ -157,9 +157,6 @@ def main():
                                                                         # ( e.g. {'time': '2023-12-17T18:45:56Z', 'test': 'false', 'measurements': {'ws': 1.55, 'rain': 1}} )
                 for i in range(len(data)):
                     t = resources.get_time(data[i]['time'])
-
-                    #if t.minute != 0 and t.minute != 15 and t.minute != 30 and t.minute != 45: # only keep those timestamps not on 15 minute interval
-                       #print(f"Current minute: {t.minute} | Whole timestamp: {t}")
                     time.append(str(data[i]['time']))
                     total_num_measurements += len(data[i]['measurements'].keys())
                     total_num_timestamps += 1
@@ -167,6 +164,7 @@ def main():
                     measurements.append(to_append)
                     test.append(str(data[i]['test']))
 
+                        
         else: # if a time window was specified by user
             print(f"\t\t Time window specified.\n\t\t Returning data from {time_window_start} -> {time_window_end}")
             window_data = resources.time_window(int(iD), timestamp_start, timestamp_end, timestamp_window_start, timestamp_window_end, \
@@ -188,8 +186,8 @@ def main():
             print(f"\t Finished writing to file.\t\t\t\t\t\t{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             print(f"\t Total number of measurements: {total_num_measurements}")
         else:
-            # print("\t ========================= WARNING =========================")
-            # print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
+            print("\t ========================= WARNING =========================")
+            print(f"\t No data found at specified timeframe for {portal_name} Instrument ID: {iD}\n")
             txt = f"\\{portal_name}_instrumentID_{iD}_[WARNING].txt"
             file_path = data_path + txt
             with open(file_path, 'w') as file:
