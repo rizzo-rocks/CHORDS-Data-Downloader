@@ -74,7 +74,7 @@ import resources
 null_value = '' # OPTIONAL
 include_test = False # OPTIONAL
 
-portal_url = r"https://chords.portal.com 
+portal_url = r"https://chords.portal.com/"
 portal_name = "PORTAL NAME"
 data_path = r"C://path//to//local//storage//" 
 instrument_IDs = [
@@ -88,7 +88,6 @@ end = 'YYYY-MM-DD HH:MM:SS'
 columns_desired = [] # it is important that the list be empty if no columns are to be specified!
 time_window_start = 'HH:MM:SS' # it is important that these be empty strings if no time window is to be specified!
 time_window_end = 'HH:MM:SS' 
-  
 
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
 
