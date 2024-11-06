@@ -143,19 +143,36 @@ def sort_columns(columns:list, portal_name:str) -> list:
     d_sort = [ # Dominican Republic
         'ht1', 'bt1', 'mt1', 'hh1', 'bmp_slp', 'bp1', 'rg', 'ws', 'wd', 'wg', 'wgd', 'sv1', 'si1', 'su1', 'hth', 'bpc'
     ]
+    a_sort = [ # Argentina
+        'st1', 'bt1', 'mt1', 'sh1', 'bp1', 'rg', 'rgs', 'rgt', 'ws', 'wd', 'wg', 'wgd', 'sv1', 'si1', 'su1', 'hth', 'bpc', 'bcs', 'cfr', 'css'
+    ]
+    z_sort = [ # Zimbabwe
+        'rg1', 'rg2', 'rgt1', 'rgt2', 'rgp1', 'rgp2',
+        'hi',  'wbt', 'wbgt',
+        'bt1', 'st1', 'mt1',
+        'bh1', 'sh1',
+        'bp1', 'bp2',
+        'hth', 'bpc', 'bcs', 'css', 'cfr'
+    ]
 
-    if portal_name == "Barbados":
+    portal_name_lower = portal_name.lower()
+
+    if portal_name_lower == "Barbaodos".lower():
         column_map = {col: i for i, col in enumerate(b_sort)}
-    elif portal_name == "Trinidad":
+    elif portal_name_lower == "Trinidad".lower():
         column_map = {col: i for i, col in enumerate(t_sort)}
-    elif portal_name == "3D PAWS":
+    elif portal_name_lower == "3D PAWS".lower():
         column_map = {col: i for i, col in enumerate(threeD_sort)}
-    elif portal_name == "3D Calibration":
+    elif portal_name_lower == "Calibration".lower():
         column_map = {col: i for i, col in enumerate(threeD_cal_sort)}
-    elif portal_name == "FEWSNET":
+    elif portal_name_lower == "FEWSNET".lower():
         column_map = {col: i for i, col in enumerate(f_sort)}
-    elif portal_name == "Dominican Republic":
+    elif portal_name_lower == "Dominican Republic".lower():
         column_map = {col: i for i, col in enumerate(d_sort)}
+    elif portal_name_lower == "Argentina".lower():
+        column_map = {col: i for i, col in enumerate(a_sort)}
+    elif portal_name_lower == "Zimbabwe".lower():
+        column_map = {col: i for i, col in enumerate(z_sort)}
     else:
         print("Could not sort columns.")
         sys.exit(1) 
@@ -520,262 +537,262 @@ def reduce_datapoints(error_message:str, iD:int, timestamp_start:datetime, times
     return [time, measurements, test, total_num_measurements]
 
 
-"""
-Accepts the CHORDS portal name specified by user and creates the correct README associated with that portal.
-"""
-def create_README(portal_name:str, data_path:str):
-    if not isinstance(portal_name, str):
-        raise TypeError(f"The 'portal_name' parameter in create_README() should be of type <str>, passed: {type(portal_name)}")
-    if not isinstance(data_path, str):
-        raise TypeError(f"The 'data_path' parameter in create_README() should be of type <str>, passed: {type(data_path)}")
+# """
+# Accepts the CHORDS portal name specified by user and creates the correct README associated with that portal.
+# """
+# def create_README(portal_name:str, data_path:str):
+#     if not isinstance(portal_name, str):
+#         raise TypeError(f"The 'portal_name' parameter in create_README() should be of type <str>, passed: {type(portal_name)}")
+#     if not isinstance(data_path, str):
+#         raise TypeError(f"The 'data_path' parameter in create_README() should be of type <str>, passed: {type(data_path)}")
     
-    portal_lookup = [
-        'Barbados', 'Trinidad', '3D PAWS', '3D Calibration', 'FEWSNET', 'Kenya', 'Cayman Islands', 'Dominican Republic'
-    ]
+#     portal_lookup = [
+#         'Barbados', 'Trinidad', '3D PAWS', '3D Calibration', 'FEWSNET', 'Kenya', 'Cayman Islands', 'Dominican Republic'
+#     ]
 
-    if portal_name in portal_lookup:
-        portal_index = portal_lookup.index(portal_name)
+#     if portal_name in portal_lookup:
+#         portal_index = portal_lookup.index(portal_name)
 
-        if portal_index == 0: # Barbados
-            with open(data_path + 'README.txt', 'w') as file: 
-                file.write("\t==================================================================================\n")
-                file.write("\t============================= Units of measurement guide =========================\n")
-                file.write("\t==================================================================================\n\n")
-                file.write("\tSensor name\t(shortname)\t\tMeasured Property\t\t(units)\n")
-                file.write("\t__________________________________________________________________________________\n\n")
+#         if portal_index == 0: # Barbados
+#             with open(data_path + 'README.txt', 'w') as file: 
+#                 file.write("\t==================================================================================\n")
+#                 file.write("\t============================= Units of measurement guide =========================\n")
+#                 file.write("\t==================================================================================\n\n")
+#                 file.write("\tSensor name\t(shortname)\t\tMeasured Property\t\t(units)\n")
+#                 file.write("\t__________________________________________________________________________________\n\n")
 
-                file.write("\tHTU21D_T\t(t1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBMP280_T\t(t2)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP9808_T\t(t3)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D_RH\t(rh1)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tBMP280_SLP\t(msl1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
-                file.write("\tBMP280_SP\t(sp1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
-                file.write("\twindspeed\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\twinddirection\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\tprecipitation\t(rain)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tSI1145_VIS\t(vis1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_IR\t(ir1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_UV\t(uv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tHTU21D_T\t(t1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMP280_T\t(t2)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP9808_T\t(t3)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D_RH\t(rh1)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tBMP280_SLP\t(msl1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
+#                 file.write("\tBMP280_SP\t(sp1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
+#                 file.write("\twindspeed\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\twinddirection\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\tprecipitation\t(rain)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tSI1145_VIS\t(vis1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_IR\t(ir1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_UV\t(uv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
         
-        if portal_index == 1: # Trinidad
-            with open(data_path + 'README.txt', 'w') as file:
-                file.write("\t==============================================================================================\n")
-                file.write("\t=================================== Units of measurement guide ===============================\n")
-                file.write("\t==============================================================================================\n\n")
-                file.write("\tSensor name\t(shortname)\t\tMeasured Property\t\t\t(units)\n")
-                file.write("\t______________________________________________________________________________________________\n\n")
+#         if portal_index == 1: # Trinidad
+#             with open(data_path + 'README.txt', 'w') as file:
+#                 file.write("\t==============================================================================================\n")
+#                 file.write("\t=================================== Units of measurement guide ===============================\n")
+#                 file.write("\t==============================================================================================\n\n")
+#                 file.write("\tSensor name\t(shortname)\t\tMeasured Property\t\t\t(units)\n")
+#                 file.write("\t______________________________________________________________________________________________\n\n")
 
-                file.write("\tBMX280 Temperature\t\t(bt1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP9808 Temperature\t\t(mt1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D Temperature\t\t(ht1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBMX280 Pressure\t\t\t(bp1)\t\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBMX280 Relative Humidity\t(bh1)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHTU21D Relative Humidity\t(hh1)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tWind Speed\t\t\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\tWind Direction\t\t\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\tRain Gauge\t\t\t(rg)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tSI1145 Visible\t\t\t(sv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145 Infrared\t\t\t(si1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145 Ultraviolet\t\t(su1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tBattery Current State\t\t(bcs)\t\t\tState of Health\t\t(count #)\n")
-                file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
-                file.write("\tBattery Charge Fault Register\t(cfr)\t\t\tState of Health\t\t(count #)\n")
-                file.write("\tCell Signal Strength\t\t(css)\t\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tBMX280 Temperature\t\t(bt1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP9808 Temperature\t\t(mt1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D Temperature\t\t(ht1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMX280 Pressure\t\t\t(bp1)\t\t\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBMX280 Relative Humidity\t(bh1)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tHTU21D Relative Humidity\t(hh1)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tWind Speed\t\t\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\tWind Direction\t\t\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\tRain Gauge\t\t\t(rg)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tSI1145 Visible\t\t\t(sv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145 Infrared\t\t\t(si1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145 Ultraviolet\t\t(su1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tBattery Current State\t\t(bcs)\t\t\tState of Health\t\t(count #)\n")
+#                 file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tBattery Charge Fault Register\t(cfr)\t\t\tState of Health\t\t(count #)\n")
+#                 file.write("\tCell Signal Strength\t\t(css)\t\t\tState of Health\t\t(percent %)\n")
 
-        if portal_index == 2: # 3D PAWS
-            with open(data_path + 'README.txt', 'w') as file: 
-                file.write("\t==========================================================================================\n")
-                file.write("\t================================= Units of measurement guide =============================\n")
-                file.write("\t==========================================================================================\n\n")
-                file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
-                file.write("\t__________________________________________________________________________________________\n\n")
+#         if portal_index == 2: # 3D PAWS
+#             with open(data_path + 'README.txt', 'w') as file: 
+#                 file.write("\t==========================================================================================\n")
+#                 file.write("\t================================= Units of measurement guide =============================\n")
+#                 file.write("\t==========================================================================================\n\n")
+#                 file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
+#                 file.write("\t__________________________________________________________________________________________\n\n")
 
-                file.write("\tHTU21D_T\t\t\t(t1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D Temperature\t\t(ht1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHIH Temperature 2\t\t(ht2)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D_T\t\t\t(htu21d_temp)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBMP280_T\t\t\t(t2)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBMP280_T\t\t\t(bmp_temp)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBME_T\t\t\t\t(bme_temp)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBMX280 Temperature 1\t\t(bt1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP9808_T\t\t\t(t3)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP9808_T\t\t\t(mcp9808)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP9808 Temperature 1\t\t(mt1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tSHT Temperature\t\t\t(st1)\t\t\tTemperature\t\t(degrees C)\n\n")
+#                 file.write("\tHTU21D_T\t\t\t(t1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D Temperature\t\t(ht1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHIH Temperature 2\t\t(ht2)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D_T\t\t\t(htu21d_temp)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMP280_T\t\t\t(t2)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMP280_T\t\t\t(bmp_temp)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBME_T\t\t\t\t(bme_temp)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMX280 Temperature 1\t\t(bt1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP9808_T\t\t\t(t3)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP9808_T\t\t\t(mcp9808)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP9808 Temperature 1\t\t(mt1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tSHT Temperature\t\t\t(st1)\t\t\tTemperature\t\t(degrees C)\n\n")
 
-                file.write("\tBMP280_ALT\t\t\t(bmp_altitude)\t\tAltitude\t\t(meter m)\n\n")
+#                 file.write("\tBMP280_ALT\t\t\t(bmp_altitude)\t\tAltitude\t\t(meter m)\n\n")
 
-                file.write("\tBMP280_SLP\t\t\t(msl1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
-                file.write("\tBMP280_SLP\t\t\t(bmp_slp)\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBMP280_SP\t\t\t(sp1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
-                file.write("\tBMP280_SP\t\t\t(bmp_pressure)\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBME_StationPres\t\t\t(bme_pressure)\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBME_SeaLevelPres\t\t(bme_slp)\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBMX280 Pressure 1\t\t(bp1)\t\t\tAir Pressure Value\t(hectopascal hPa)\n\n")
+#                 file.write("\tBMP280_SLP\t\t\t(msl1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
+#                 file.write("\tBMP280_SLP\t\t\t(bmp_slp)\t\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBMP280_SP\t\t\t(sp1)\t\t\tAir Pressure Value\t(millibar mbar)\n")
+#                 file.write("\tBMP280_SP\t\t\t(bmp_pressure)\t\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBME_StationPres\t\t\t(bme_pressure)\t\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBME_SeaLevelPres\t\t(bme_slp)\t\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBMX280 Pressure 1\t\t(bp1)\t\t\tAir Pressure Value\t(hectopascal hPa)\n\n")
 
-                file.write("\tWind speed\t\t\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\twindspeed\t\t\t(wind_speed)\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\tWind direction\t\t\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\twinddirection\t\t\t(wind_direction)\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n\n")
+#                 file.write("\tWind speed\t\t\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\twindspeed\t\t\t(wind_speed)\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\tWind direction\t\t\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\twinddirection\t\t\t(wind_direction)\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n\n")
 
-                file.write("\tHTU21D_RH\t\t\t(rh1)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHTU21D_RH\t\t\t(htu21d_humidity)\tHumidity Value\t\t(percent %)\n")
-                file.write("\tBMX280 Relative Humidity\t(bh1)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tBME_RH\t\t\t\t(bme_humidity)\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHTU21D Relative Humidity\t(hh1)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHIH Humidity 2\t\t\t(hh2)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tRelative Humidity\t\t(sh1)\t\t\tHumidity Value\t\t(percent %)\n\n")
+#                 file.write("\tHTU21D_RH\t\t\t(rh1)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tHTU21D_RH\t\t\t(htu21d_humidity)\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tBMX280 Relative Humidity\t(bh1)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tBME_RH\t\t\t\t(bme_humidity)\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tHTU21D Relative Humidity\t(hh1)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tHIH Humidity 2\t\t\t(hh2)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tRelative Humidity\t\t(sh1)\t\t\tHumidity Value\t\t(percent %)\n\n")
 
-                file.write("\tRain\t\t\t\t(rain)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge Total Today\t\t(rgt)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tStation Rain Gauge\t\t(rg)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge Total Prior\t\t(rgp)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain_Gauge_Delta_Seconds\t(rgds)\t\t\tTime Measurement Accuracy (seconds s)\n\n")
+#                 file.write("\tRain\t\t\t\t(rain)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge Total Today\t\t(rgt)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tStation Rain Gauge\t\t(rg)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge Total Prior\t\t(rgp)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain_Gauge_Delta_Seconds\t(rgds)\t\t\tTime Measurement Accuracy (seconds s)\n\n")
 
-                file.write("\tWater level\t\t\t(hl)\t\t\tDatum\t\t\t(millimeter mm)\n")
-                file.write("\tWater level outliers\t\t(wlo)\t\t\tNumber of Samples\t(count #)\n")
-                file.write("\tWater level deviation\t\t(wld)\t\t\tDeviation\t\t(millimeter mm)\n")
-                file.write("\tWater level median\t\t(wlm)\t\t\tDatum\t\t\t(millimeter #)\n")
-                file.write("\tWater level raw\t\t\t(wlr)\t\t\tDatum\t\t\t(millimeter mm)\n\n")
+#                 file.write("\tWater level\t\t\t(hl)\t\t\tDatum\t\t\t(millimeter mm)\n")
+#                 file.write("\tWater level outliers\t\t(wlo)\t\t\tNumber of Samples\t(count #)\n")
+#                 file.write("\tWater level deviation\t\t(wld)\t\t\tDeviation\t\t(millimeter mm)\n")
+#                 file.write("\tWater level median\t\t(wlm)\t\t\tDatum\t\t\t(millimeter #)\n")
+#                 file.write("\tWater level raw\t\t\t(wlr)\t\t\tDatum\t\t\t(millimeter mm)\n\n")
 
-                file.write("\tSnow_Depth\t\t\t(sg)\t\t\tDatum\t\t\t(centimeter cm)\n\n")
+#                 file.write("\tSnow_Depth\t\t\t(sg)\t\t\tDatum\t\t\t(centimeter cm)\n\n")
 
-                file.write("\tSoil Temperature 1\t\t(st1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tSoil Temperature 2\t\t(st2)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tSoil Temperature 3\t\t(st3)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tSoil Moisture 1\t\t\t(sm1)\t\t\tData Point\t\t(percent saturation % Sat)\n")
-                file.write("\tSoil Moisture 2\t\t\t(sm2)\t\t\tData Point\t\t(kilopascal kPa)\n")
-                file.write("\tSoil Moisture 3\t\t\t(sm3)\t\t\tData Point\t\t(percent saturation % Sat)\n\n")
+#                 file.write("\tSoil Temperature 1\t\t(st1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tSoil Temperature 2\t\t(st2)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tSoil Temperature 3\t\t(st3)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tSoil Moisture 1\t\t\t(sm1)\t\t\tData Point\t\t(percent saturation % Sat)\n")
+#                 file.write("\tSoil Moisture 2\t\t\t(sm2)\t\t\tData Point\t\t(kilopascal kPa)\n")
+#                 file.write("\tSoil Moisture 3\t\t\t(sm3)\t\t\tData Point\t\t(percent saturation % Sat)\n\n")
 
-                file.write("\tSI1145 Visible 1\t\t(sv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145 Infrared 1\t\t(si1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145 Ultraviolet 1\t\t(su1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_VIS\t\t\t(vis1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_IR\t\t\t(ir1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_UV\t\t\t(uv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_VIS\t\t\t(si1145_vis)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_IR\t\t\t(si1145_ir)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_UV\t\t\t(si1145_uv)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSP_215\t\t\t\t(solar1)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSP_212\t\t\t\t(solar2)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_visible1\t\t\t(si1145_vis1)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI11145_infrared1\t\t(si1145_ir1)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_UV1\t\t\t(si1145_uv1)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_visible2\t\t\t(si1145_vis2)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_infrared2\t\t(si1145_ir2)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_UV2\t\t\t(si1145_uv2)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_visible3\t\t\t(si1145_vis3)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI11145_infrared3\t\t(si1145_ir3)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_UV3\t\t\t(si1145_uv3)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_visible4\t\t\t(si1145_vis4)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI11145_infrared4\t\t(si1145_ir4)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tSI1145_UV4\t\t\t(si1145_uv4)\t\tDownwelling Irradiance\t(count #)\n")
-                file.write("\tVEML770 light sensor\t\t(lx)\t\t\tDownwelling Irradiance\t(count #)\n\n")
+#                 file.write("\tSI1145 Visible 1\t\t(sv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145 Infrared 1\t\t(si1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145 Ultraviolet 1\t\t(su1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_VIS\t\t\t(vis1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_IR\t\t\t(ir1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_UV\t\t\t(uv1)\t\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_VIS\t\t\t(si1145_vis)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_IR\t\t\t(si1145_ir)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_UV\t\t\t(si1145_uv)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSP_215\t\t\t\t(solar1)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSP_212\t\t\t\t(solar2)\t\tDownwelling Irradiance\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_visible1\t\t\t(si1145_vis1)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI11145_infrared1\t\t(si1145_ir1)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_UV1\t\t\t(si1145_uv1)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_visible2\t\t\t(si1145_vis2)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_infrared2\t\t(si1145_ir2)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_UV2\t\t\t(si1145_uv2)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_visible3\t\t\t(si1145_vis3)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI11145_infrared3\t\t(si1145_ir3)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_UV3\t\t\t(si1145_uv3)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_visible4\t\t\t(si1145_vis4)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI11145_infrared4\t\t(si1145_ir4)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tSI1145_UV4\t\t\t(si1145_uv4)\t\tDownwelling Irradiance\t(count #)\n")
+#                 file.write("\tVEML770 light sensor\t\t(lx)\t\t\tDownwelling Irradiance\t(count #)\n\n")
                 
-                file.write("\tBattery Current State\t\t(bcs)\t\t\tState of Health\t\t(count #)\n")
-                file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
-                file.write("\tBattery Charge Fault Register\t(cfr)\t\t\tState of Health\t\t(count #)\n")
-                file.write("\tBattery Voltage\t\t\t(bv)\t\t\tState of Health\t\t(volts V)\n")
-                file.write("\tCell Signal Strength\t\t(css)\t\t\tState of Health\t\t(percent %)\n")
-                file.write("\tHealth 16bits\t\t\t(hth)\t\t\tState of Health\t\t(count #)\n\n")
+#                 file.write("\tBattery Current State\t\t(bcs)\t\t\tState of Health\t\t(count #)\n")
+#                 file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tBattery Charge Fault Register\t(cfr)\t\t\tState of Health\t\t(count #)\n")
+#                 file.write("\tBattery Voltage\t\t\t(bv)\t\t\tState of Health\t\t(volts V)\n")
+#                 file.write("\tCell Signal Strength\t\t(css)\t\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tHealth 16bits\t\t\t(hth)\t\t\tState of Health\t\t(count #)\n\n")
 
-        if portal_index == 3: # 3D Calibration
-            with open(data_path + 'README.txt', 'w') as file:
-                file.write("\t==========================================================================================\n")
-                file.write("\t================================= Units of measurement guide =============================\n")
-                file.write("\t==========================================================================================\n\n")
-                file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
-                file.write("\t__________________________________________________________________________________________\n\n")
+#         if portal_index == 3: # 3D Calibration
+#             with open(data_path + 'README.txt', 'w') as file:
+#                 file.write("\t==========================================================================================\n")
+#                 file.write("\t================================= Units of measurement guide =============================\n")
+#                 file.write("\t==========================================================================================\n\n")
+#                 file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
+#                 file.write("\t__________________________________________________________________________________________\n\n")
 
-                file.write("\tHTU21D_T\t\t\t(htu21d_temp)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBMP280_T\t\t\t(bmp_temp)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP9808_T\t\t\t(mcp9808)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D_T\t\t\t(sht31d_temp)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D_RH\t\t\t(sht31d_humidity)\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHTU21D_RH\t\t\t(htu21d_humidity)\tHumidity Value\t\t(percent %)\n")
-                file.write("\tBMP280_SLP\t\t\t(bmp_slp)\t\tAir Pressure Value\t(millibar mbar)\n")
-                file.write("\tBMP280_SP\t\t\t(bmp_pressure)\t\tAir Pressure Value\t(millibar mbar)\n")
-                file.write("\train\t\t\t\t(rain)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\twindspeed\t\t\t(wind_speed)\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\twinddirection\t\t\t(wind_direction)\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\tSI1145_VIS\t\t\t(si1145_vis)\t\tRadiance\t\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_IR\t\t\t(si1145_ir)\t\tRadiance\t\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_UV\t\t\t(si1145_uv)\t\tRadiance\t\t(watts per square meter W/m^2)\n")
-                file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tHTU21D_T\t\t\t(htu21d_temp)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMP280_T\t\t\t(bmp_temp)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP9808_T\t\t\t(mcp9808)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D_T\t\t\t(sht31d_temp)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D_RH\t\t\t(sht31d_humidity)\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tHTU21D_RH\t\t\t(htu21d_humidity)\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tBMP280_SLP\t\t\t(bmp_slp)\t\tAir Pressure Value\t(millibar mbar)\n")
+#                 file.write("\tBMP280_SP\t\t\t(bmp_pressure)\t\tAir Pressure Value\t(millibar mbar)\n")
+#                 file.write("\train\t\t\t\t(rain)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\twindspeed\t\t\t(wind_speed)\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\twinddirection\t\t\t(wind_direction)\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\tSI1145_VIS\t\t\t(si1145_vis)\t\tRadiance\t\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_IR\t\t\t(si1145_ir)\t\tRadiance\t\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_UV\t\t\t(si1145_uv)\t\tRadiance\t\t(watts per square meter W/m^2)\n")
+#                 file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
 
-        if portal_index == 4: # FEWSNET
-            with open(data_path + 'README.txt', 'w') as file:
-                file.write("\t==========================================================================================\n")
-                file.write("\t================================= Units of measurement guide =============================\n")
-                file.write("\t==========================================================================================\n\n")
-                file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
-                file.write("\t__________________________________________________________________________________________\n\n")
+#         if portal_index == 4: # FEWSNET
+#             with open(data_path + 'README.txt', 'w') as file:
+#                 file.write("\t==========================================================================================\n")
+#                 file.write("\t================================= Units of measurement guide =============================\n")
+#                 file.write("\t==========================================================================================\n\n")
+#                 file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
+#                 file.write("\t__________________________________________________________________________________________\n\n")
 
-                file.write("\tBMX Temperature 1\t\t\t(bt1)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tBMX Temperature 2\t\t\t(bt2)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU Temperature 1\t\t\t(ht1)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHIH Temperature\t\t\t\t(ht2)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tSHT Temperature\t\t\t\t(st1)\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP Temperature 1\t\t\t(mt1)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMX Temperature 1\t\t\t(bt1)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tBMX Temperature 2\t\t\t(bt2)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU Temperature 1\t\t\t(ht1)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHIH Temperature\t\t\t\t(ht2)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tSHT Temperature\t\t\t\t(st1)\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP Temperature 1\t\t\t(mt1)\t\tTemperature\t\t(degrees C)\n")
 
-                file.write("\tBMX Humidity 1\t\t\t\t(bh1)\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tBMX Humidity 2\t\t\t\t(bh2)\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHTU Humidity 1\t\t\t\t(hh1)\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tHIH Humidity\t\t\t\t(hh2)\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tSHT Humidity\t\t\t\t(sh1)\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tBMX Humidity 1\t\t\t\t(bh1)\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tBMX Humidity 2\t\t\t\t(bh2)\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tHTU Humidity 1\t\t\t\t(hh1)\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tHIH Humidity\t\t\t\t(hh2)\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tSHT Humidity\t\t\t\t(sh1)\t\tHumidity Value\t\t(percent %)\n")
 
-                file.write("\tBMX Pressure 1\t\t\t\tt(bp1)\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBMX Pressure 2\t\t\t\t\t(bp2)\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBMX Pressure 1\t\t\t\tt(bp1)\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBMX Pressure 2\t\t\t\t\t(bp2)\tAir Pressure Value\t(hectopascal hPa)\n")
 
-                file.write("\tRain Gauge 1\t\t\t\t(rg1)\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 2\t\t\t\t(rg2)\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 1 Total Today\t(rgt1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 2 Total Today\t(rgt2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 1 Total Prior\t(rgp1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tRain Gauge 2 Total Prior\t(rgp2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge 1\t\t\t\t(rg1)\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge 2\t\t\t\t(rg2)\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge 1 Total Today\t(rgt1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge 2 Total Today\t(rgt2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge 1 Total Prior\t(rgp1)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tRain Gauge 2 Total Prior\t(rgp2)\t\t\tPrecipitation\t\t(millimeter mm)\n")
 
-                file.write("\tHealth\t\t\t\t(hth)\t\tState of Health\t\t(count #)\n\n")
-                file.write("\tBattery Percent Charge\t\t\t(bpc)\t\tState of Health\t\t(percent %)\n")
-                file.write("\tBattery Current State\t\t\t(bcs)\t\tState of Health\t\t(count #)\n")
-                file.write("\tCell Signal Strength\t\t\t(css)\t\tState of Health\t\t(percent %)\n")
-                file.write("\tBattery Charge Fault Register\t\t(cfr)\t\tState of Health\t\t(count #)\n")
+#                 file.write("\tHealth\t\t\t\t(hth)\t\tState of Health\t\t(count #)\n\n")
+#                 file.write("\tBattery Percent Charge\t\t\t(bpc)\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tBattery Current State\t\t\t(bcs)\t\tState of Health\t\t(count #)\n")
+#                 file.write("\tCell Signal Strength\t\t\t(css)\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tBattery Charge Fault Register\t\t(cfr)\t\tState of Health\t\t(count #)\n")
 
-        # INSERT KENYA HERE
-        # INSERT CAYMAN ISLANDS HERE        
+#         # INSERT KENYA HERE
+#         # INSERT CAYMAN ISLANDS HERE        
 
-        if portal_index == 7: # Dominican Republic
-            with open(data_path + 'README.txt', 'w') as file:
-                file.write("\t==========================================================================================\n")
-                file.write("\t================================= Units of measurement guide =============================\n")
-                file.write("\t==========================================================================================\n\n")
-                file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
-                file.write("\t__________________________________________________________________________________________\n\n")
+#         if portal_index == 7: # Dominican Republic
+#             with open(data_path + 'README.txt', 'w') as file:
+#                 file.write("\t==========================================================================================\n")
+#                 file.write("\t================================= Units of measurement guide =============================\n")
+#                 file.write("\t==========================================================================================\n\n")
+#                 file.write("\tSensor name\t\t\t(shortname)\t\tMeasured Property\t(units)\n")
+#                 file.write("\t__________________________________________________________________________________________\n\n")
 
-                file.write("\tBMP280_T\t\t\t(bt1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D_T\t\t\t(ht1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tMCP9808\t\t\t\t(mt1)\t\t\tTemperature\t\t(degrees C)\n")
-                file.write("\tHTU21D_RH\t\t\t(hh1)\t\t\tHumidity Value\t\t(percent %)\n")
-                file.write("\tBMP280_SLP\t\t\t(bmp_pressure)\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tBMP280_SP\t\t\t(bp1)\t\t\tAir Pressure Value\t(hectopascal hPa)\n")
-                file.write("\tPrecipitation\t\t\t(rg)\t\t\tPrecipitation\t\t(millimeter mm)\n")
-                file.write("\tWind Speed\t\t\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\tWind Direction\t\t\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
-                file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
-                file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n\n")
-                file.write("\tSI1145_VIS\t\t\t(sv1)\t\t\tRadiance\t\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_IR\t\t\t(si1)\t\t\tRadiance\t\t(watts per square meter W/m^2)\n")
-                file.write("\tSI1145_UV\t\t\t(su1)\t\t\tRadiance\t\t(watts per square meter W/m^2)\n")
-                file.write("\tHealth\t\t\t\t(hth)\t\t\tState of Health\t\t(dimensionless)\n\n")
-                file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
+#                 file.write("\tBMP280_T\t\t\t(bt1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D_T\t\t\t(ht1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tMCP9808\t\t\t\t(mt1)\t\t\tTemperature\t\t(degrees C)\n")
+#                 file.write("\tHTU21D_RH\t\t\t(hh1)\t\t\tHumidity Value\t\t(percent %)\n")
+#                 file.write("\tBMP280_SLP\t\t\t(bmp_pressure)\t\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tBMP280_SP\t\t\t(bp1)\t\t\tAir Pressure Value\t(hectopascal hPa)\n")
+#                 file.write("\tPrecipitation\t\t\t(rg)\t\t\tPrecipitation\t\t(millimeter mm)\n")
+#                 file.write("\tWind Speed\t\t\t(ws)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\tWind Direction\t\t\t(wd)\t\t\tWind Direction\t\t(degrees N degN)\n")
+#                 file.write("\tWind Gust\t\t\t(wg)\t\t\tWind Speed\t\t(meters per second m/s)\n")
+#                 file.write("\tWind Gust Direction\t\t(wgd)\t\t\tWind Direction\t\t(degrees N degN)\n\n")
+#                 file.write("\tSI1145_VIS\t\t\t(sv1)\t\t\tRadiance\t\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_IR\t\t\t(si1)\t\t\tRadiance\t\t(watts per square meter W/m^2)\n")
+#                 file.write("\tSI1145_UV\t\t\t(su1)\t\t\tRadiance\t\t(watts per square meter W/m^2)\n")
+#                 file.write("\tHealth\t\t\t\t(hth)\t\t\tState of Health\t\t(dimensionless)\n\n")
+#                 file.write("\tBattery Percent Charge\t\t(bpc)\t\t\tState of Health\t\t(percent %)\n")
 
-    else:
-        raise ValueError(f"create_README() expects a portal name to be one of the following (case sensitive):\n\t \
-                            Barbados, Trinidad, 3D PAWS, 3D Calibration, Kenya, Cayman Islands, or Dominican Republic.")
+#     else:
+#         raise ValueError(f"create_README() expects a portal name to be one of the following (case sensitive):\n\t \
+#                             Barbados, Trinidad, 3D PAWS, 3D Calibration, Kenya, Cayman Islands, or Dominican Republic.")
 
-    return 0
+#     return 0

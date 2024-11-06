@@ -74,25 +74,27 @@ import resources
 null_value = '' # OPTIONAL
 include_test = False # OPTIONAL
 
-portal_url = r"https://chords.portal.com/"
-portal_name = "PORTAL NAME"
-data_path = r"C://path//to//local//storage//" 
+portal_url = r"https://3d-argentina.icdp.ucar.edu/"
+portal_name = "Argentina"
+data_path = r"/Users/rzieber/Downloads/" 
 instrument_IDs = [
     1,2,3
 ]
-user_email = ''
-api_key = '' 
-start = 'YYYY-MM-DD HH:MM:SS' # CHORDS starts a new day at 0600, 0700 or 0800, depending on the portal
-end = 'YYYY-MM-DD HH:MM:SS'
+user_email = 'rzieber@ucar.edu'
+api_key = 'j1W8rbTsRpDRV9CD6EPy' 
+start = '2024-11-06 00:00:00' # CHORDS starts a new day at 0600, 0700 or 0800, depending on the portal
+end = '2024-11-06 23:59:59'
 
 columns_desired = [] # it is important that the list be empty if no columns are to be specified!
-time_window_start = 'HH:MM:SS' # it is important that these be empty strings if no time window is to be specified!
-time_window_end = 'HH:MM:SS' 
+time_window_start = '' # it is important that these be empty strings if no time window is to be specified!
+time_window_end = '' 
+
+
 
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
 
 def main():
-    # user input validation
+    # user input validation -----------------------------------------------------------------------------------------------------------
     format_str = "%Y-%m-%d %H:%M:%S"
     timestamp_start = datetime.strptime(start, format_str) 
     timestamp_end = datetime.strptime(end, format_str)
@@ -115,13 +117,14 @@ def main():
             raise ValueError(f"Both the 'time_window_start' and 'time_window_end' variables must be populated to specify a collection timeframe.")
 
     portal_lookup = [
-        'Barbados', 'Trinidad', '3D PAWS', '3D Calibration', 'FEWSNET', 'Kenya', 'Cayman Islands', 'Dominican Republic'
+        'barbados', 'trinidad', '3d paws', 'calibration', 'fewsnet', 'kenya', 
+        'zimbabwe', 'dominican republic', 'argentina', 'zambia', 'bangladesh'
     ]
-    if portal_name not in portal_lookup:
-        raise ValueError(f"Please enter one of the following portal names as they appear here (case sensitive):\n\t \
-                            Barbados, Trinidad, 3D PAWS, 3D Calibration, FEWSNET, Kenya, Cayman Islands")
+    if portal_name.lower() not in portal_lookup:
+        raise ValueError(f"Please enter one of the following portal names (case insensitive):\n\t \
+                            Barbados, Trinidad, 3D PAWS, Calibration, FEWSNET, Kenya, Zimbabwe, Zambia, Argentina, Bangladesh, Dominican Republic")
     
-    # processing loop
+    # processing loop ------------------------------------------------------------------------------------------------------------------
     for iD in instrument_IDs:
         if not isinstance(iD, int):
             raise TypeError(f"The instrument id's must be integers, passed {type(iD)} for id {iD}")
