@@ -144,7 +144,8 @@ def sort_columns(columns:list, portal_name:str) -> list:
         'ht1', 'bt1', 'mt1', 'hh1', 'bmp_slp', 'bp1', 'rg', 'ws', 'wd', 'wg', 'wgd', 'sv1', 'si1', 'su1', 'hth', 'bpc'
     ]
     a_sort = [ # Argentina
-        'st1', 'bt1', 'mt1', 'sh1', 'bp1', 'rg', 'rgs', 'rgt', 'ws', 'wd', 'wg', 'wgd', 'sv1', 'si1', 'su1', 'hth', 'bpc', 'bcs', 'cfr', 'css'
+        'st1', 'bt1', 'mt1', 'sh1', 'bp1', 'rg', 'rgs', 'rgt', 'rgp', 'ws', 'wd', 'wg_compass_dir', 'wg', 'wgd', 'wgd_compass_dir', 
+        'sv1', 'si1', 'su1', 'hth', 'bpc', 'bcs', 'cfr', 'css'
     ]
     z_sort = [ # Zimbabwe
         'rg1', 'rg2', 'rgt1', 'rgt2', 'rgp1', 'rgp2',
@@ -273,6 +274,7 @@ def csv_builder(headers:list, time:np.ndarray, measurements:np.ndarray, test:np.
             data.append(measurement_dict)
         
         df = pd.DataFrame(data, columns=headers)
+        df['time'] = pd.to_datetime(df['time'])
         df.to_csv(filepath, index=False)
     else:
         raise TimestampError()
@@ -306,13 +308,11 @@ def struct_has_data(measurements:np.ndarray, time:np.ndarray, test:np.ndarray) -
     
     flag = True
     if len(measurements) == 0:
-        #print("\t\t No measurements found.")
         flag = False
     if len(time) == 0:
         print("\t\t No timestamps found.\n")
         flag = False
     if len(test) == 0:
-        #print("\t\t No test values found.")
         flag = False
 
     return flag
@@ -344,6 +344,7 @@ def has_errors(all_fields:dict) -> bool:
 Handles specific time window requested by user. Stores only data that falls into the time window specified and returns data from API pull as a list of lists.
 
 TO DO: Increase efficiency. Currently steps through day-by-day, will take forever for large amounts of data.
+       Use Pandas for this purpose because it is undoubtedbly better
 """
 def time_window(iD:int, timestamp_start:datetime, timestamp_end:datetime, timestamp_window_start:dt_time, \
                                 timestamp_window_end:dt_time, portal_url:str, user_email:str, api_key:str, null_value) -> list:
