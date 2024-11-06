@@ -195,8 +195,6 @@ def main():
             with open(file_path, 'w') as file:
                 file.write("No data was found for the specified time frame.\nCheck the CHORDS portal to verify.")
 
-    #resources.create_README(portal_name, data_path)
-
 
 if __name__ == "__main__":
     main()
