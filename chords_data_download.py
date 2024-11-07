@@ -92,7 +92,7 @@ time_window_end = 'HH:MM:SS'
 # MAIN PROGRAM ------------------------------------------------------------------------------------------------------------------------
 
 def main():
-    # user input validation
+    # user input validation -----------------------------------------------------------------------------------------------------------
     format_str = "%Y-%m-%d %H:%M:%S"
     timestamp_start = datetime.strptime(start, format_str) 
     timestamp_end = datetime.strptime(end, format_str)
@@ -115,13 +115,14 @@ def main():
             raise ValueError(f"Both the 'time_window_start' and 'time_window_end' variables must be populated to specify a collection timeframe.")
 
     portal_lookup = [
-        'Barbados', 'Trinidad', '3D PAWS', '3D Calibration', 'FEWSNET', 'Kenya', 'Cayman Islands', 'Dominican Republic'
+        'barbados', 'trinidad', '3d paws', 'calibration', 'fewsnet', 'kenya', 
+        'zimbabwe', 'dominican republic', 'argentina', 'zambia', 'bangladesh'
     ]
-    if portal_name not in portal_lookup:
-        raise ValueError(f"Please enter one of the following portal names as they appear here (case sensitive):\n\t \
-                            Barbados, Trinidad, 3D PAWS, 3D Calibration, FEWSNET, Kenya, Cayman Islands")
+    if portal_name.lower() not in portal_lookup:
+        raise ValueError(f"Please enter one of the following portal names (case insensitive):\n\t \
+                            Barbados, Trinidad, 3D PAWS, Calibration, FEWSNET, Kenya, Zimbabwe, Zambia, Argentina, Bangladesh, Dominican Republic")
     
-    # processing loop
+    # processing loop ------------------------------------------------------------------------------------------------------------------
     for iD in instrument_IDs:
         if not isinstance(iD, int):
             raise TypeError(f"The instrument id's must be integers, passed {type(iD)} for id {iD}")
@@ -191,8 +192,6 @@ def main():
             file_path = data_path + txt
             with open(file_path, 'w') as file:
                 file.write("No data was found for the specified time frame.\nCheck the CHORDS portal to verify.")
-
-    #resources.create_README(portal_name, data_path)
 
 
 if __name__ == "__main__":
